@@ -8,43 +8,46 @@ public class Level2 {
         String reply = "";
         Scanner input = new Scanner(System.in);
         Task[] list = new Task[100];
-        int i = -1;
+
+        int i = 0;    // counter to place stuff at the right index in the list of task's
+        int j = 0;    // counter thats used when printing list
+
         while (!reply.equals("bye")) {
-            int j = 0;
             System.out.println("\t____________________________________________________________\n");
-            reply = input.next();
+            reply = input.nextLine();
             System.out.println("\t____________________________________________________________");
+
             if (reply.equals("bye")) {
                 System.out.println("\tBye. Hope to see you again soon!");
-                System.out.println("\t____________________________________________________________\n");
-            } else if (reply.equals("list")) {
-                j = j + 1;
+                System.out.println("\t____________________________________________________________\n"); }
+
+            else if (reply.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
+                j = 0;
                 for (Task thing : list) {
                     if (thing != null) {
-                        System.out.println(j + ". " + thing.getStatusIcon() + " " + thing.description);
-                    }
-                }
-            } else {
-                System.out.println(reply.substring(0, 5));
-                try {
-                    String test = reply;
-                    if (test.substring(0, 5).equals("done ") && Integer.parseInt(test.substring(6)) <= 100) {
-                        System.out.println("asdksdlwkjd");
-                    }
-                }
-                catch(Exception e){
-                    System.out.println("akkkkkkkkkkksdksdlwkjd");
-                    i = i + 1;
+                        j = j + 1;
+                        System.out.println(j + ". [" + thing.getStatusIcon() + "] " + thing.description); } } }
+
+            else {
+                if (reply.length() > 5) {
+                    if (reply.substring(0, 5).equals("done ") && reply.substring(5).matches("-?\\d+(\\.\\d+)?")) { //regex for all number
+                        int tasknum = Integer.parseInt(reply.substring(5))-1;
+                        if (tasknum < i) {
+                            list[tasknum].markAsDone();
+                            System.out.println("Nice! I've marked this task as done: \n\t [" + list[tasknum].getStatusIcon() + "]" + list[tasknum].description);
+                            reply = "";
+                        } else {
+                            System.out.println("No task with that number");
+                            reply = ""; } } }
+
+                if (reply != "") {
                     Task t = new Task(reply);
                     list[i] = t;
                     System.out.println("\tadded: " + reply);
-                    }
-                }
-            }
-        }
-    }
-
+                    i = i + 1;
+                } } } }
+}
 
 
 
