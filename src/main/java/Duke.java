@@ -74,6 +74,5 @@ public class Duke {
         }
         return "case3";   // if its not case1 or case2 it must be case3
     }
-    
 }
 

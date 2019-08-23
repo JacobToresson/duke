@@ -14,5 +14,4 @@ public class Task {
     public void markAsDone(){
         this.isDone = true;
     }
-
 }
