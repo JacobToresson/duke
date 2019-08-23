@@ -6,7 +6,6 @@ public class Duke {
         String reply = "start";
         Scanner input = new Scanner(System.in);
         Task[] list = new Task[100];
-
         int i = 0;    // counter to place stuff at the right index in the list of task's
 
         while (!reply.equals("bye")) {
