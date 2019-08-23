@@ -33,7 +33,7 @@ public class Level2 {
                 if (reply.length() > 5) {
                     if (reply.substring(0, 5).equals("done ") && reply.substring(5).matches("-?\\d+(\\.\\d+)?")) { //regex for all number
                         int tasknum = Integer.parseInt(reply.substring(5))-1;
-                        if (tasknum < i) {
+                        if (tasknum < i && tasknum > -1) {
                             list[tasknum].markAsDone();
                             System.out.println("Nice! I've marked this task as done: \n\t [" + list[tasknum].getStatusIcon() + "]" + list[tasknum].description);
                             reply = "";
