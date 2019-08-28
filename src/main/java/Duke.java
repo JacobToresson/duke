@@ -7,53 +7,64 @@ public class Duke {
         Scanner input = new Scanner(System.in);
         Task[] list = new Task[100];
         int i = 0;    // counter to place stuff at the right index in the list of task's
+        Task t = null;
+        int index1;
+        boolean command;
 
         while (!reply.equals("bye")) {
             System.out.println("\t" + "_".repeat(50) + "\n");
             reply = input.nextLine();
+
             System.out.println("\t" + "_".repeat(50) + "\n");
-            String caseX = checkDone(list, reply);
+            command = false;
 
             if (reply.equals("bye")) {
                 turnOff();
+                command = true;
+            }
 
-            } else if (reply.equals("list")) {
+            else if (reply.equals("list")) {
                 printList(list);
-
-            }
-            else if (caseX.equals("case1")) { // "done" but there is nothing on that spot in the list
-                System.out.println("No task with that number");
+                command = true;
             }
 
-            else if (caseX.equals("case2")) { //"done" and valid number --> mark as done
-                list[Integer.parseInt(reply.substring(5))-1].markAsDone();
-                System.out.println("Nice! I've marked this task as done: \n\t [" + list[Integer.parseInt(reply.substring(5))-1].getStatusIcon() + "]" + list[Integer.parseInt(reply.substring(5))-1].description);
-            }
+            else if(reply.length()>=5) {
+                if (reply.substring(0, 5).toLowerCase().equals("done ")) {
+                    try {
+                        list[Integer.parseInt(reply.substring(5)) - 1].markAsDone();
+                        System.out.println("Nice! I've marked this task as done: \n\t [" + list[Integer.parseInt(reply.substring(5)) - 1].getStatusIcon() + "]" + list[Integer.parseInt(reply.substring(5)) - 1].description);
+                        command = true;
+                    }
+                    catch (Exception e) {
+                        System.out.println("No task with that number");
+                        command = true;
+                    }
+                }
 
-            else if (caseX.equals("case3")) { //not "done" --> add new task to list
-                i++;
-                Task t;
-                int index1;
-
-                if(reply.substring(0,6).toLowerCase().equals("todoo ")){
+                else if (reply.substring(0, 6).toLowerCase().equals("todoo")) {
                     t = new ToDos(reply.substring(6));
                 }
 
-                else if(reply.substring(0,9).toLowerCase().equals("deadline ")){
-                    index1 = reply.indexOf("/by ");
-                    t = new Deadline(reply.substring(9, index1),reply.substring(index1+4));
+                else if ((reply.substring(0, 6).toLowerCase().equals("event"))) {
+                    index1 = reply.indexOf("/at ");
+                    t = new Event(reply.substring(6, index1), reply.substring(index1 + 4));
                 }
 
-                else if(reply.substring(0,6).toLowerCase().equals("event ")){
-                    index1 = reply.indexOf("/at ");
-                    t = new Event(reply.substring(6, index1),reply.substring(index1+4));
+                else if (reply.length() > 9) {
+                    if (reply.substring(0, 9).toLowerCase().equals("deadline ")) {
+                        index1 = reply.indexOf("/by ");
+                        t = new Deadline(reply.substring(9, index1), reply.substring(index1 + 4));
+                    }
                 }
-                else{
-                    t = new Task("FEL");
-                }
+            }
+
+            if(t != null) {
                 list[i] = t;
                 System.out.println("\t Got it. I've added this task:\n\t " + t);
                 i++;
+            }
+            else if(!command){
+                System.out.println("Unknown type of task or command");
             }
         }
     }
@@ -71,23 +82,6 @@ public class Duke {
                 j++;
             }
         }
-    }
-
-    public static String checkDone(Task[] list, String reply){
-        if(reply.equals("done")){
-            return "case1";
-        }
-        else if(reply.length()>=5){
-            if(reply.substring(0,5).toLowerCase().equals("done ") && reply.substring(5).matches("^[1-9][0-9]?$|^100$")){
-                if(list[Integer.parseInt(reply.substring(5))-1] != null) {
-                    return "case2";
-                }
-                else{
-                    return "case1";
-                }
-            }
-        }
-        return "case3";   // if its not case1 or case2 it must be case3
     }
 }
 
