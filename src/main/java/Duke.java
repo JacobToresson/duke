@@ -9,10 +9,6 @@ public class Duke {
         int i = 0;    // counter to place stuff at the right index in the list of task's
 
         while (!reply.equals("bye")) {
-            if(i == 99){
-                System.out.println("list full, quiting");
-                break;
-            }
             System.out.println("\t" + "_".repeat(50) + "\n");
             reply = input.nextLine();
             System.out.println("\t" + "_".repeat(50) + "\n");
@@ -35,9 +31,28 @@ public class Duke {
             }
 
             else if (caseX.equals("case3")) { //not "done" --> add new task to list
-                Task t = new Task(reply);
+                i++;
+                Task t;
+                int index1;
+
+                if(reply.substring(0,6).toLowerCase().equals("todoo ")){
+                    t = new ToDos(reply.substring(6));
+                }
+
+                else if(reply.substring(0,9).toLowerCase().equals("deadline ")){
+                    index1 = reply.indexOf("/by ");
+                    t = new Deadline(reply.substring(9, index1),reply.substring(index1+4));
+                }
+
+                else if(reply.substring(0,6).toLowerCase().equals("event ")){
+                    index1 = reply.indexOf("/at ");
+                    t = new Event(reply.substring(6, index1),reply.substring(index1+4));
+                }
+                else{
+                    t = new Task("FEL");
+                }
                 list[i] = t;
-                System.out.println("\tadded: " + reply);
+                System.out.println("\t Got it. I've added this task:\n\t " + t);
                 i++;
             }
         }
@@ -52,7 +67,7 @@ public class Duke {
         System.out.println("Here are the tasks in your list:");
         for (Task thing : list) {
             if (thing != null) {
-                System.out.println(j + ". [" + thing.getStatusIcon() + "] " + thing.description);
+                System.out.println(String.valueOf(j) + thing);
                 j++;
             }
         }
