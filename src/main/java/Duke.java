@@ -1,8 +1,5 @@
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner; // https://www.programiz.com/java-programming/basic-input-output
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Duke {
@@ -28,6 +25,8 @@ public class Duke {
             }
         file.closeFile();
         printList(list);
+        String symbol;
+        String j;
 
         while (!reply.equals("bye")) {
             System.out.println("\t" + "_".repeat(50) + "\n");
@@ -82,7 +81,7 @@ public class Duke {
                             t = new Event(reply.substring(6, index1), reply.substring(index1 + 4));
                         }
                     } catch (DukeExceptions e) {
-                        System.out.println("☹ OOPS!!! An event input most contain the /by characters.");
+                        System.out.println("☹ OOPS!!! An event input most contain the /ay characters.");
 
                     }
                 } else if (reply.length() > 9) {
@@ -103,13 +102,35 @@ public class Duke {
                 }
             }
 
-            if (t != null && command == false) {
+            if (t != null && !command ) {
                 list[i] = t;
                 i++;
-
                 System.out.println("\tGot it. I've added this task:\n\t " + t + "\n\tNow you have " + i + " tasks in the list.");
-                PrintWriter output = new PrintWriter(String.valueOf(file));
-                output.println("hej");
+
+                try(FileWriter fw = new FileWriter("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt", true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    PrintWriter out = new PrintWriter(bw))
+                {
+                    symbol = t.toString().substring(1,2);
+                    System.out.println(symbol);
+
+                    if(t.isDone){
+                        j = "1";
+                    }
+                    else {
+                        j = "0";
+                    }
+                    String output = symbol + " | " + j + " | " + t.description + " | ";
+                    if(symbol.equals("E") || symbol.equals("D")) {
+                        symbol = symbol + t.by + " | ";
+                    }
+                    out.println(output);
+                }
+
+
+                catch (IOException e) {
+                    System.out.println("something whent wrong when printing to the file");
+                }
 
 
             } else if (!command) {

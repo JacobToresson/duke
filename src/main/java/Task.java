@@ -1,4 +1,5 @@
 public class Task {
+    public String by;
     protected String description;
     protected boolean isDone;
 
