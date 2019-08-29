@@ -5,3 +5,4 @@ D | 1 | finish level-8 | next week |
 D | 0 | was att | tomorrow | 
 T | 0 | test | 
 T | 1 | owieriuweor | 
+D | 0 | wash stuff  | tomorrow | 

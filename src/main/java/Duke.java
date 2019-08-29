@@ -21,7 +21,7 @@ public class Duke {
         int i = countList(list);
 
         while (true) {
-            
+
             //getting user input
             System.out.println("\t" + "_".repeat(50) + "\n");
             reply = input.nextLine();
@@ -91,7 +91,13 @@ public class Duke {
                         if (index1 == -1) {
                             throw new DukeExceptions("Unvalid event input");
                         } else {
-                            t = new Event(reply.substring(6, index1), reply.substring(index1 + 4));
+                            String date = checkDate(reply.substring(index1 + 4));
+                            if (date.equals("error")) {
+                                command = true;
+                            }
+                            else {
+                                t = new Event(reply.substring(6, index1), date);
+                            }
                         }
                     } catch (DukeExceptions e) {
                         command = true;
@@ -108,13 +114,20 @@ public class Duke {
                         try {
                             if (index1 == -1) {
                                 throw new DukeExceptions("Unvalid deadline input");
-                            } else {
-                                t = new Deadline(reply.substring(9, index1), reply.substring(index1 + 4));
+                            }
+                            else {
+                                String date = checkDate(reply.substring(index1 + 4));
+                                if (date.equals("error")) {
+                                    command = true;
+                                }
+                                else {
+                                    t = new Deadline(reply.substring(6, index1), date);
+                                }
                             }
                         }
                         catch (DukeExceptions e) {
                             command = true;
-                            System.out.println("☹ OOPS!!! An deadline input most contain the /at characters.");
+                            System.out.println("☹ OOPS!!! An deadline input most contain the /by characters.");
                         }
                     }
                 }
@@ -168,5 +181,20 @@ public class Duke {
                 break;
             }
         }
+    }
+
+    public static String checkDate(String date){
+        try{
+            if(date.equals("test")){
+                return date;
+            }
+            else{
+                throw new DukeExceptions("Unvalid date");
+            }
+        }
+        catch(DukeExceptions e){
+            System.out.println("Unvalid date");
+        }
+        return "error;";
     }
 }
