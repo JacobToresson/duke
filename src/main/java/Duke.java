@@ -4,8 +4,8 @@ import java.util.Scanner; // https://www.programiz.com/java-programming/basic-in
 public class Duke {
     public static void main(String[] args) throws IOException {
         System.out.println("\t" + "_".repeat(50) + "\n\tHello I'm Duke\n\tWhat can I do for you?");
-        String reply = "start";
-        Scanner input = new Scanner(System.in);
+        String reply;
+        Scanner input = new Scanner(System.in); // to be able to take input form user
 
         Task t;           // first task object
         int index1;       // for checking input
@@ -24,20 +24,31 @@ public class Duke {
             System.out.println("\t" + "_".repeat(50) + "\n");
             reply = input.nextLine();
             System.out.println("\t" + "_".repeat(50) + "\n");
+
+            // resetting in each loop
             command = false;
             t = null;
 
+            // checking if user is done
             if (reply.equals("bye")) {
                 turnOff(file, list);
-                command = true;
+                System.out.println("\t" + "_".repeat(50) + "\n");
+                break;
 
+            // printing list if user inputs "list"
             } else if (reply.equals("list")) {
                 printList(list);
                 command = true;
+            }
 
-            } else if (reply.length() >= 5) {
+            //(to avoid slicing a string outside of the string)
+            else if (reply.length() >= 5) {
+
+                // checking if user input in "done"
                 if (reply.substring(0, 5).toLowerCase().equals("done ")) {
                     command = true;
+
+                    // checking if "done" was followed by a valid number
                     try {
                         if (reply.substring(5).matches("^[1-9][0-9]?$|^100$")) {
                             if (list[Integer.parseInt(reply.substring(5)) - 1] == null) {
@@ -46,15 +57,18 @@ public class Duke {
                                 list[Integer.parseInt(reply.substring(5)) - 1].markAsDone();
                                 System.out.println("Nice! I've marked this task as done: \n\t" + list[Integer.parseInt(reply.substring(5)) - 1]);
                             }
-                        } else {
+                        }
+                        else {
                             throw new DukeExceptions("No task with that number");
                         }
                     }
                     catch (DukeExceptions e) {
                         System.out.println("☹ OOPS!!! No task with that number ");
                     }
+                }
 
-                } else if (reply.substring(0, 5).toLowerCase().equals("todoo")) {
+                // checking if user input "todoo"
+                else if (reply.substring(0, 5).toLowerCase().equals("todoo")) {
                     try {
                         if (reply.substring(5).replaceAll("\\s+", "").equals("")) {
                             throw new DukeExceptions("No task with that number");
@@ -66,8 +80,10 @@ public class Duke {
                         command = true;
                         System.out.println("☹ OOPS!!! The description of a todo cannot be empty.");
                     }
+                }
 
-                } else if ((reply.substring(0, 5).toLowerCase().equals("event"))) {
+                // checking if user input "event"
+                else if ((reply.substring(0, 5).toLowerCase().equals("event"))) {
                     index1 = reply.indexOf("/at ");
                     try {
                         if (index1 == -1) {
@@ -79,8 +95,12 @@ public class Duke {
                         command = true;
                         System.out.println("☹ OOPS!!! An event input most contain the /at characters.");
                     }
+                }
 
-                } else if (reply.length() > 9) {
+                //(to avoid slicing a string outside of the string)
+                else if (reply.length() > 9) {
+
+                    // checking if user input "deadline "
                     if (reply.substring(0, 9).toLowerCase().equals("deadline ")) {
                         index1 = reply.indexOf("/by ");
                         try {
@@ -89,7 +109,8 @@ public class Duke {
                             } else {
                                 t = new Deadline(reply.substring(9, index1), reply.substring(index1 + 4));
                             }
-                        } catch (DukeExceptions e) {
+                        }
+                        catch (DukeExceptions e) {
                             command = true;
                             System.out.println("☹ OOPS!!! An deadline input most contain the /at characters.");
                         }
@@ -106,7 +127,8 @@ public class Duke {
             else if (!command) {
                 try {
                     throw new DukeExceptions("Unvalid command");
-                } catch (DukeExceptions e) {
+                }
+                catch (DukeExceptions e) {
                     System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                 }
             }
@@ -130,7 +152,6 @@ public class Duke {
             }
         }
         return numberOfTask;
-
     }
 
     public static void printList(Task[] list) {
