@@ -37,7 +37,7 @@ public class Duke {
                 System.out.println("\t" + "_".repeat(50) + "\n");
                 break;
 
-            // printing list if user inputs "list"
+                // printing list if user inputs "list"
             } else if (reply.equals("list")) {
                 printList(list);
                 command = true;
@@ -59,12 +59,10 @@ public class Duke {
                                 list[Integer.parseInt(reply.substring(5)) - 1].markAsDone();
                                 System.out.println("Nice! I've marked this task as done: \n\t" + list[Integer.parseInt(reply.substring(5)) - 1]);
                             }
-                        }
-                        else {
+                        } else {
                             throw new DukeExceptions("No task with that number");
                         }
-                    }
-                    catch (DukeExceptions e) {
+                    } catch (DukeExceptions e) {
                         System.out.println("☹ OOPS!!! No task with that number ");
                     }
                 }
@@ -77,8 +75,7 @@ public class Duke {
                         } else {
                             t = new ToDos(reply.substring(6));
                         }
-                    }
-                    catch (DukeExceptions e) {
+                    } catch (DukeExceptions e) {
                         command = true;
                         System.out.println("☹ OOPS!!! The description of a todo cannot be empty.");
                     }
@@ -91,17 +88,18 @@ public class Duke {
                         if (index1 == -1) {
                             throw new DukeExceptions("Unvalid event input");
                         } else {
-                            String date = checkDate(reply.substring(index1 + 4));
-                            if (date.equals("error")) {
-                                command = true;
-                            }
-                            else {
-                                t = new Event(reply.substring(6, index1), date);
+                            boolean checkDate = checkDate(reply.substring(index1 + 4));
+                            if (checkDate) {
+                                String date = convertDate(reply.substring(index1 + 4));
+                                t = new Deadline(reply.substring(6, index1), date);
+                            } else {
+                                throw new DukeExceptions("Unvalid deadline input");
                             }
                         }
+
                     } catch (DukeExceptions e) {
                         command = true;
-                        System.out.println("☹ OOPS!!! An event input most contain the /at characters.");
+                        System.out.println("☹ OOPS!!! Unvalid event input");
                     }
                 }
 
@@ -114,87 +112,89 @@ public class Duke {
                         try {
                             if (index1 == -1) {
                                 throw new DukeExceptions("Unvalid deadline input");
-                            }
-                            else {
-                                String date = checkDate(reply.substring(index1 + 4));
-                                if (date.equals("error")) {
-                                    command = true;
-                                }
-                                else {
+                            } else {
+                                boolean checkDate = checkDate(reply.substring(index1 + 4));
+                                if (checkDate) {
+                                    String date = convertDate(reply.substring(index1 + 4));
                                     t = new Deadline(reply.substring(6, index1), date);
+                                } else {
+                                    throw new DukeExceptions("Unvalid deadline input");
                                 }
                             }
                         }
-                        catch (DukeExceptions e) {
-                            command = true;
-                            System.out.println("☹ OOPS!!! An deadline input most contain the /by characters.");
+                        catch(DukeExceptions e){
+                                command = true;
+                                System.out.println("☹ OOPS!!! Unvalid deadline input.");
                         }
                     }
                 }
             }
 
-            if (t != null && !command ) {
-                list[i] = t;
-                i++;
-                System.out.println("\tGot it. I've added this task:\n\t " + t + "\n\tNow you have " + i + " tasks in the list.");
-            }
+                if (t != null && !command) {
+                    list[i] = t;
+                    i++;
+                    System.out.println("\tGot it. I've added this task:\n\t " + t + "\n\tNow you have " + i + " tasks in the list.");
+                }
+                else if (!command) {
+                    try {
+                        throw new DukeExceptions("Unvalid command");
+                    }
+                    catch (DukeExceptions e) {
+                        System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                    }
+                }
 
-            else if (!command) {
-                try {
-                    throw new DukeExceptions("Unvalid command");
-                }
-                catch (DukeExceptions e) {
-                    System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
-                }
-            }
         }
     }
 
-    public static void turnOff(HandleFile file, Task[] list) throws IOException {
-        System.out.println("\tBye. Hope to see you again soon!\n\t" );
+    public static void turnOff (HandleFile file, Task[]list) throws IOException {
+        System.out.println("\tBye. Hope to see you again soon!\n\t");
         HandleFile.updateFile(list);
         file.closeFile();
     }
 
-    public static int countList(Task[] list){
+    public static int countList (Task[]list){
         int numberOfTask = 0;
-        for(Task task:list){
-            if(task == null) {
+        for (Task task : list) {
+            if (task == null) {
                 break;
-            }
-            else{
+            } else {
                 numberOfTask++;
             }
         }
         return numberOfTask;
     }
 
-    public static void printList(Task[] list) {
+    public static void printList (Task[]list){
         int j = 1;
         System.out.println("Here are the tasks in your list:");
         for (Task task : list) {
             if (task != null) {
                 System.out.println(String.valueOf(j) + ".  " + task);
                 j++;
-            }
-            else{
+            } else {
                 break;
             }
         }
     }
 
-    public static String checkDate(String date){
-        try{
-            if(date.equals("test")){
-                return date;
-            }
-            else{
-                throw new DukeExceptions("Unvalid date");
-            }
-        }
-        catch(DukeExceptions e){
-            System.out.println("Unvalid date");
-        }
-        return "error;";
+    public static boolean checkDate (String date){
+        return date.matches("^(([0-2]\\d|[3][0-1])\\/([0]\\d|[1][0-2])\\/[2][0]\\d{2})$|^(([0-2]\\d|[3][0-1])\\/([0]\\d|[1][0-2])\\/[2][0]\\d{2}\\s([0-1]\\d|[2][0-3])\\:[0-5]\\d\\:[0-5]\\d)$");
+    }
+
+    public static String convertDate(String date){
+        String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+        int index1 = date.indexOf("/");
+        int index2 = date.indexOf("/", index1+1);
+        System.out.println(index1);
+        String day = date.substring(0,index1);
+        System.out.println(day);
+        String mounth = months[Integer.parseInt(date.substring(index1,index2))];
+        String year = date.substring(index2, index2+4);
+        System.out.println(year);
+
+        return date;
     }
 }
+
+
