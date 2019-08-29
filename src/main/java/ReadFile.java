@@ -1,7 +1,7 @@
 import java.io.*; // https://www.youtube.com/watch?v=3RNYUKxAgmw
 import java.util.*;
 import java.lang.*;
-
+import java.io.PrintWriter;
 
 public class ReadFile {
     private Scanner x;
@@ -25,7 +25,6 @@ public class ReadFile {
 
         while(x.hasNext()) {
             identifier = x.next();
-            System.out.println(identifier);
             x.next();
             completed = x.next();
             x.next();
@@ -77,8 +76,39 @@ public class ReadFile {
         x.close();
     }
 
+    public static void updateFile(Task[] list) throws IOException {
+        String symbol;
+        String j;
+        FileWriter fw;
+        BufferedWriter bw;
+        PrintWriter out;
 
-
+        try {
+            fw = new FileWriter("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt", false);
+            bw = new BufferedWriter(fw);
+            for (Task task : list) {
+                if (task == null) {
+                    break;
+                }
+                symbol = task.toString().substring(1, 2);
+                if (task.isDone) {
+                    j = "1";
+                } else {
+                    j = "0";
+                }
+                String output = symbol + " | " + j + " | " + task.description + " | ";
+                if (symbol.equals("E") || symbol.equals("D")) {
+                    symbol = symbol + task.by + " | ";
+                }
+                fw.append(output);
+            }
+            fw.flush();
+            fw.close();
+        }
+        catch(Exception e){
+            System.out.println("Something went wrong while printing the file");
+        }
+    }
 }
 
 

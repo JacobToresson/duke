@@ -1,9 +1,0 @@
-T | 1 | wash car |
-T | 0 | doing laundry |
-T | 1 | going home |
-D | 0 | buy stuff | tomorrow |
-E | 1 | buy stuff | some times anyways  |
-E | 1 | buy stuff | some times anyways  |
-E | 1 | buy stuff | some times anyways  |
-
-T | 0 |  gfhj | 
