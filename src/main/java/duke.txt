@@ -2,4 +2,6 @@ E | 1 | buy stuff | tomorrow |
 E | 1 | wash things | tomorrow | 
 T | 1 | finish level-7 | 
 D | 0 | finish level-8 | next week | 
-D | 0 | was att  | tomorrow | 
+D | 0 | was att | tomorrow | 
+T | 0 |  test | 
+T | 1 |  owieriuweor | 

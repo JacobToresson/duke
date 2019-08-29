@@ -2,29 +2,25 @@ import java.io.*;
 import java.util.Scanner; // https://www.programiz.com/java-programming/basic-input-output
 
 public class Duke {
-    public static void main(String[] args) throws DukeExceptions, IOException {
+    public static void main(String[] args) throws IOException {
         System.out.println("\t" + "_".repeat(50) + "\n\tHello I'm Duke\n\tWhat can I do for you?");
         String reply = "start";
         Scanner input = new Scanner(System.in);
 
-        Task t = null;
-        int index1;
-        boolean command;
+        Task t;           // first task object
+        int index1;       // for checking input
+        boolean command;  // to keep track of what has happend
+
+        // creating the list of tasks from file
         HandleFile file = new HandleFile();
         file.openFile();
-        int i = 0;    // counter to place stuff at the right index in the list of task's
         Task[] list = file.readFileAndCreateList();
-        for(Task task:list){
-            if(task == null) {
-                break;
-            }
-            else{
-                i++;
-                }
-            }
         file.closeFile();
 
-        while (!reply.equals("bye")) {
+        // counting the amount of tasks in list
+        int i = countList(list);
+
+        while (true) {
             System.out.println("\t" + "_".repeat(50) + "\n");
             reply = input.nextLine();
             System.out.println("\t" + "_".repeat(50) + "\n");
@@ -34,9 +30,11 @@ public class Duke {
             if (reply.equals("bye")) {
                 turnOff(file, list);
                 command = true;
+
             } else if (reply.equals("list")) {
                 printList(list);
                 command = true;
+
             } else if (reply.length() >= 5) {
                 if (reply.substring(0, 5).toLowerCase().equals("done ")) {
                     command = true;
@@ -51,9 +49,11 @@ public class Duke {
                         } else {
                             throw new DukeExceptions("No task with that number");
                         }
-                    } catch (DukeExceptions e) {
+                    }
+                    catch (DukeExceptions e) {
                         System.out.println("☹ OOPS!!! No task with that number ");
                     }
+
                 } else if (reply.substring(0, 5).toLowerCase().equals("todoo")) {
                     try {
                         if (reply.substring(5).replaceAll("\\s+", "").equals("")) {
@@ -61,7 +61,8 @@ public class Duke {
                         } else {
                             t = new ToDos(reply.substring(6));
                         }
-                    } catch (DukeExceptions e) {
+                    }
+                    catch (DukeExceptions e) {
                         command = true;
                         System.out.println("☹ OOPS!!! The description of a todo cannot be empty.");
                     }
@@ -77,8 +78,8 @@ public class Duke {
                     } catch (DukeExceptions e) {
                         command = true;
                         System.out.println("☹ OOPS!!! An event input most contain the /at characters.");
-
                     }
+
                 } else if (reply.length() > 9) {
                     if (reply.substring(0, 9).toLowerCase().equals("deadline ")) {
                         index1 = reply.indexOf("/by ");
@@ -87,7 +88,6 @@ public class Duke {
                                 throw new DukeExceptions("Unvalid deadline input");
                             } else {
                                 t = new Deadline(reply.substring(9, index1), reply.substring(index1 + 4));
-
                             }
                         } catch (DukeExceptions e) {
                             command = true;
@@ -101,8 +101,9 @@ public class Duke {
                 list[i] = t;
                 i++;
                 System.out.println("\tGot it. I've added this task:\n\t " + t + "\n\tNow you have " + i + " tasks in the list.");
+            }
 
-            } else if (!command) {
+            else if (!command) {
                 try {
                     throw new DukeExceptions("Unvalid command");
                 } catch (DukeExceptions e) {
@@ -113,19 +114,35 @@ public class Duke {
     }
 
     public static void turnOff(HandleFile file, Task[] list) throws IOException {
-        System.out.println("\tBye. Hope to see you again soon!\n\t" + "_".repeat(50) + "\n");
+        System.out.println("\tBye. Hope to see you again soon!\n\t" );
         HandleFile.updateFile(list);
         file.closeFile();
     }
 
+    public static int countList(Task[] list){
+        int numberOfTask = 0;
+        for(Task task:list){
+            if(task == null) {
+                break;
+            }
+            else{
+                numberOfTask++;
+            }
+        }
+        return numberOfTask;
+
+    }
 
     public static void printList(Task[] list) {
         int j = 1;
         System.out.println("Here are the tasks in your list:");
-        for (Task thing : list) {
-            if (thing != null) {
-                System.out.println(String.valueOf(j) + ".  " + thing);
+        for (Task task : list) {
+            if (task != null) {
+                System.out.println(String.valueOf(j) + ".  " + task);
                 j++;
+            }
+            else{
+                break;
             }
         }
     }
