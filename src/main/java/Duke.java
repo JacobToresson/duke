@@ -21,6 +21,8 @@ public class Duke {
         int i = countList(list);
 
         while (true) {
+            
+            //getting user input
             System.out.println("\t" + "_".repeat(50) + "\n");
             reply = input.nextLine();
             System.out.println("\t" + "_".repeat(50) + "\n");
