@@ -1,9 +1,8 @@
 import java.io.*; // https://www.youtube.com/watch?v=3RNYUKxAgmw
 import java.util.*;
 import java.lang.*;
-import java.io.PrintWriter;
 
-public class ReadFile {
+public class HandleFile {
     private Scanner x;
     public void openFile(){
         try{
@@ -17,7 +16,6 @@ public class ReadFile {
         Task[] list = new Task[100];
         int i = 0;
         String identifier;
-        String next;
         String completed;
         String description;
         String test;
@@ -61,7 +59,8 @@ public class ReadFile {
                     list[i] = new Event(description, when);
                 }
                 else{
-                    System.out.println("NÅGOT ÄR FEL");
+                    System.out.println("Unidentified kind of task");
+                    break;
                 }
             }
             if (completed.equals("1")) {
@@ -77,36 +76,21 @@ public class ReadFile {
     }
 
     public static void updateFile(Task[] list) throws IOException {
-        String symbol;
-        String j;
-        FileWriter fw;
-        BufferedWriter bw;
-        PrintWriter out;
-
         try {
-            fw = new FileWriter("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt", false);
-            bw = new BufferedWriter(fw);
+            FileWriter fw = new FileWriter("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt", false);
             for (Task task : list) {
                 if (task == null) {
                     break;
                 }
-                symbol = task.toString().substring(1, 2);
-                if (task.isDone) {
-                    j = "1";
-                } else {
-                    j = "0";
-                }
-                String output = symbol + " | " + j + " | " + task.description + " | ";
-                if (symbol.equals("E") || symbol.equals("D")) {
-                    symbol = symbol + task.by + " | ";
-                }
+                String output = task.toOutput();
                 fw.append(output);
+                fw.append("\n");
             }
             fw.flush();
             fw.close();
         }
         catch(Exception e){
-            System.out.println("Something went wrong while printing the file");
+            System.out.println("Something went wrong while printing to the file");
         }
     }
 }

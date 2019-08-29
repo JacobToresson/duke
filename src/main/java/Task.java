@@ -1,5 +1,4 @@
 public class Task {
-    public String by;
     protected String description;
     protected boolean isDone;
 
@@ -18,6 +17,9 @@ public class Task {
 
     public String toString(){
         return "[" + getStatusIcon() + "] " + description;
+    }
 
+    public String toOutput() {
+        return "description";
     }
 }

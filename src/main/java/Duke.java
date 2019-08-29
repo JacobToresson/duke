@@ -10,7 +10,7 @@ public class Duke {
         Task t = null;
         int index1;
         boolean command;
-        ReadFile file = new ReadFile();
+        HandleFile file = new HandleFile();
         file.openFile();
         int i = 0;    // counter to place stuff at the right index in the list of task's
         Task[] list = file.readFileAndCreateList();
@@ -27,7 +27,6 @@ public class Duke {
         while (!reply.equals("bye")) {
             System.out.println("\t" + "_".repeat(50) + "\n");
             reply = input.nextLine();
-
             System.out.println("\t" + "_".repeat(50) + "\n");
             command = false;
             t = null;
@@ -68,7 +67,6 @@ public class Duke {
                     }
 
                 } else if ((reply.substring(0, 5).toLowerCase().equals("event"))) {
-                    command = true;
                     index1 = reply.indexOf("/at ");
                     try {
                         if (index1 == -1) {
@@ -77,12 +75,12 @@ public class Duke {
                             t = new Event(reply.substring(6, index1), reply.substring(index1 + 4));
                         }
                     } catch (DukeExceptions e) {
-                        System.out.println("☹ OOPS!!! An event input most contain the /ay characters.");
+                        command = true;
+                        System.out.println("☹ OOPS!!! An event input most contain the /at characters.");
 
                     }
                 } else if (reply.length() > 9) {
                     if (reply.substring(0, 9).toLowerCase().equals("deadline ")) {
-                        command = true;
                         index1 = reply.indexOf("/by ");
                         try {
                             if (index1 == -1) {
@@ -92,6 +90,7 @@ public class Duke {
 
                             }
                         } catch (DukeExceptions e) {
+                            command = true;
                             System.out.println("☹ OOPS!!! An deadline input most contain the /at characters.");
                         }
                     }
@@ -113,9 +112,9 @@ public class Duke {
         }
     }
 
-    public static void turnOff(ReadFile file, Task[] list) throws IOException {
+    public static void turnOff(HandleFile file, Task[] list) throws IOException {
         System.out.println("\tBye. Hope to see you again soon!\n\t" + "_".repeat(50) + "\n");
-        ReadFile.updateFile(list);
+        HandleFile.updateFile(list);
         file.closeFile();
     }
 
