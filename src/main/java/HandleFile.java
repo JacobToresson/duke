@@ -38,7 +38,7 @@ public class HandleFile {
                 }
             }
             if(identifier.equals("T")) {
-                list[i] = new ToDos(description);
+                list[i] = new ToDo(description);
             }
 
             else {
