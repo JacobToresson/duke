@@ -1,4 +1,2 @@
-T | 1 | buy things | 
-T | 0 | buy things | 
-E | 0 | ne assignment | 1st of February 2019 7pm | 
-E | 1 | birthday party | 1st of February 2019 6pm-9pm | 
+D | 0 | asignment | 1st of February 2019 6pm | 
+D | 0 | fly  | 1st of February 2019 5pm | 
