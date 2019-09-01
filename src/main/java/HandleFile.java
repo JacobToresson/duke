@@ -12,14 +12,14 @@ public class HandleFile {
             System.out.println("Could not find file");
         }
     }
-    public ArrayList<Task> readFileAndCreateList(){
-        ArrayList<Task> list=new ArrayList<Task>();
+    public Task[] readFileAndCreateList(){
+        Task[] list = new Task[100];
+        int i = 0;
         String identifier;
         String completed;
         String description;
         String test;
         String when;
-        Task task;
 
         while(x.hasNext()) {
             identifier = x.next();
@@ -38,7 +38,7 @@ public class HandleFile {
                 }
             }
             if(identifier.equals("T")) {
-                task = new ToDo(description);
+                list[i] = new ToDo(description);
             }
 
             else {
@@ -53,10 +53,10 @@ public class HandleFile {
                     }
                 }
                 if (identifier.equals("D")) {
-                    task = new Deadline(description, when);
+                    list[i] = new Deadline(description, when);
                 }
                 else if (identifier.equals("E")) {
-                    task = new Event(description, when);
+                    list[i] = new Event(description, when);
                 }
                 else{
                     System.out.println("Unidentified kind of task");
@@ -64,9 +64,9 @@ public class HandleFile {
                 }
             }
             if (completed.equals("1")) {
-                task.markAsDone();
+                list[i].markAsDone();
             }
-            list.add(task);
+            i++;
         }
         return list;
     }
@@ -75,7 +75,7 @@ public class HandleFile {
         x.close();
     }
 
-    public static void updateFile(ArrayList<Task> list) throws IOException {
+    public static void updateFile(Task[] list) throws IOException {
         try {
             FileWriter fw = new FileWriter("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt", false);
             for (Task task : list) {

@@ -1,6 +1,6 @@
 import java.io.*;
+import java.nio.file.FileSystemNotFoundException;
 import java.util.Scanner; // https://www.programiz.com/java-programming/basic-input-output
-import java.util.*;
 
 public class Duke {
     public static void main(String[] args) throws IOException {
@@ -10,13 +10,17 @@ public class Duke {
 
         Task t;                   // first task object
         int index1 = -1;              // for checking input
+        boolean command;        // to keep track of what has happend
         String caseX = "";     // to keep of track of what to doo
 
         // creating the list of tasks from file
         HandleFile file = new HandleFile();
         file.openFile();
-        ArrayList<Task> list = file.readFileAndCreateList();
+        Task[] list = file.readFileAndCreateList();
         file.closeFile();
+
+        // counting the amount of tasks in list
+        int i = countList(list);
 
         while (true) {
             //getting user input
@@ -53,9 +57,6 @@ public class Duke {
                     else if(reply.substring(0, 9).equals("deadline ")){
                         caseX = "deadline ";
                     }
-                    else if(reply.substring(0, 7).equals("delete ")){
-                        caseX = "delete ";
-                    }
                     else{
                         throw new DukeExceptions("Unknown commande");
                     }
@@ -68,27 +69,16 @@ public class Duke {
 
             if(caseX.equals("done ")){
                 try {
-                    if (list.get(Integer.parseInt(reply.substring(5)) - 1) == null) {
+                    if (list[Integer.parseInt(reply.substring(5)) - 1] == null) {
                         throw new DukeExceptions("unvalid done statement");
                     }
                     else {
-                        list.get(Integer.parseInt(reply.substring(5)) - 1).markAsDone();
-                        System.out.println("Nice! I've marked this task as done: \n\t" + list.get(Integer.parseInt(reply.substring(5)) - 1));
+                        list[Integer.parseInt(reply.substring(5)) - 1].markAsDone();
+                        System.out.println("Nice! I've marked this task as done: \n\t" + list[Integer.parseInt(reply.substring(5)) - 1]);
                     }
                 }
                 catch (Exception e) {
                     System.out.println("☹ OOPS!!! I'm sorry, but there are no task with that number :-(\");\n");
-                }
-            }
-
-            else if(caseX.equals("delete ")){
-                try{
-                    System.out.println("Noted. I've removed this task:\n\t" + list.get(Integer.parseInt(reply.substring(7))-1) + "\nNow you have " + list.size() + "tasks in the list" );
-                    list.remove(Integer.parseInt(reply.substring(7)) -1);
-
-                }
-                catch(Exception e){
-                    System.out.println("☹ OOPS!!! No task with that number");
                 }
             }
 
@@ -160,13 +150,14 @@ public class Duke {
             }
 
             if (t != null) {
-                list.add(t);
-                System.out.println("\tGot it. I've added this task:\n\t " + t + "\n\tNow you have " + list.size() + " tasks in the list.");
+                list[i] = t;
+                i++;
+                System.out.println("\tGot it. I've added this task:\n\t " + t + "\n\tNow you have " + i + " tasks in the list.");
             }
         }
     }
 
-    public static void turnOff (HandleFile file, ArrayList<Task> list) throws IOException {
+    public static void turnOff (HandleFile file, Task[]list) throws IOException {
         System.out.println("\tBye. Hope to see you again soon!\n\t");
         System.out.println("\t" + "_".repeat(50) + "\n");
         HandleFile.updateFile(list);
@@ -174,7 +165,19 @@ public class Duke {
         System.exit(0);
     }
 
-    public static void printList (ArrayList<Task> list){
+    public static int countList (Task[]list){
+        int numberOfTask = 0;
+        for (Task task : list) {
+            if (task == null) {
+                break;
+            } else {
+                numberOfTask++;
+            }
+        }
+        return numberOfTask;
+    }
+
+    public static void printList (Task[]list){
         int j = 1;
         System.out.println("Here are the tasks in your list:");
         for (Task task : list) {
