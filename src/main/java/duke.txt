@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 D | 0 | asignment | 1st of February 2019 6pm | 
 D | 0 | fly | 1st of February 2019 5pm | 
 T | 0 | book | 
 T | 0 | but a book | 
 T | 0 | rent a book | 
 D | 0 | buy two books  | 1st of February 2019 6pm | 
+=======
+>>>>>>> parent of 421bf45... Revert "start of setting up ui-test"
