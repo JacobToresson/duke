@@ -5,6 +5,87 @@
 
 	__________________________________________________
 
+☹ OOPS!!!  I'm sorry, but I don't know what that means :-(
+	__________________________________________________
+
+	__________________________________________________
+
+	Got it. I've added this task:
+	 [T][✘] this weeks duke assignments 
+	Now you have 1 tasks in the list.
+	__________________________________________________
+
+	__________________________________________________
+
+	Got it. I've added this task:
+	 [D][✘] homework  (by: 8th of September 2019 11:59pm)
+	Now you have 2 tasks in the list.
+	__________________________________________________
+
+	__________________________________________________
+
+	Got it. I've added this task:
+	 [E][✘] birthday party  (at: 27th of November 2019 8pm-11pm)
+	Now you have 3 tasks in the list.
+	__________________________________________________
+
+	__________________________________________________
+
+	Got it. I've added this task:
+	 [T][✘] finish duke
+	Now you have 4 tasks in the list.
+	__________________________________________________
+
+	__________________________________________________
+
+	Here are the matching tasks in your list:	
+1. [T][✘] this weeks duke assignments 	
+2. [T][✘] finish duke
+	__________________________________________________
+
+	__________________________________________________
+
 Here are the tasks in your list:
+1.  [T][✘] this weeks duke assignments 
+2.  [D][✘] homework  (by: 8th of September 2019 11:59pm)
+3.  [E][✘] birthday party  (at: 27th of November 2019 8pm-11pm)
+4.  [T][✘] finish duke
+	__________________________________________________
+
+	__________________________________________________
+
+Nice! I've marked this task as done: 
+	[T][✓] this weeks duke assignments 
+	__________________________________________________
+
+	__________________________________________________
+
+Noted. I've removed this task:
+	[E][✘] birthday party  (at: 27th of November 2019 8pm-11pm)
+Now you have 4tasks in the list
+	__________________________________________________
+
+	__________________________________________________
+
+Here are the tasks in your list:
+1.  [T][✓] this weeks duke assignments 
+2.  [D][✘] homework  (by: 8th of September 2019 11:59pm)
+3.  [T][✘] finish duke
+	__________________________________________________
+
+	__________________________________________________
+
+	No matching tasks in your list
+	__________________________________________________
+
+	__________________________________________________
+
+No task with that number
+	__________________________________________________
+
+	__________________________________________________
+
+	Bye. Hope to see you again soon!
+	
 	__________________________________________________
 
