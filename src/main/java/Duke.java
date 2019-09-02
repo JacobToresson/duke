@@ -1,6 +1,3 @@
-import java.io.*;
-import java.util.*;
-
 public class Duke {
     private Ui ui;
     private Storage storage;
