@@ -56,6 +56,9 @@ public class Duke {
                     else if(reply.substring(0, 7).equals("delete ")){
                         caseX = "delete ";
                     }
+                    else if(reply.substring(0,5).equals("find ")){
+                        caseX = "find ";
+                    }
                     else{
                         throw new DukeExceptions("Unknown commande");
                     }
@@ -92,6 +95,37 @@ public class Duke {
                 }
             }
 
+            else if(caseX.equals("find ")) {
+                int i = 1;
+                boolean empty = false;
+                boolean found = false;
+                String str1 = "";
+                try {
+                    if (reply.substring(4).trim().equals("")) {
+                        throw new DukeExceptions("Empty find statement ");
+                    }
+                }
+                catch (DukeExceptions e) {
+                    System.out.println("☹ OOPS!!! A find statement cannot be empty");
+                    empty = true;
+                }
+                if (!empty) {
+                    for (Task task : list) {
+                        if (task.description.contains(reply.substring(5))) {
+                            str1 =  str1 + "\t\n" + i + ". " + task;
+                            i++;
+                            found = true;
+                        }
+                    }
+                    if(found){
+                        System.out.println("\tHere are the matching tasks in your list:" + str1 );
+                    }
+                    else{
+                        System.out.println("\tNo matching tasks in your list");
+                    }
+                }
+            }
+
             else if(caseX.equals("todo ")) {
                 try {
                     if (reply.substring(4).replaceAll("\\s+", "").equals("")) {
@@ -102,7 +136,7 @@ public class Duke {
                     }
                 }
                 catch (DukeExceptions e) {
-                    System.out.println("☹ OOPS!!! The description of a todo cannot be empty.");
+                    System.out.println("☹ OOPS!!! A todo statement cannot be empty");
                 }
             }
 
