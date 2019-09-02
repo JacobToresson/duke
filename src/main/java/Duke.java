@@ -3,10 +3,15 @@ import java.util.Scanner; // https://www.programiz.com/java-programming/basic-in
 import java.util.*;
 
 public class Duke {
-    public static void main(String[] args) throws IOException {
-        System.out.println("\t" + "_".repeat(50) + "\n\tHello I'm Duke\n\tWhat can I do for you?");
-        String reply;
-        Scanner input = new Scanner(System.in); // to be able to take input form user
+    private Ui ui;;
+
+    public Duke(String filepath) throws IOException {
+        ui = new Ui();
+    }
+
+    public void run() throws IOException {
+        ui.welcome();
+        String input;
 
         Task t;                   // first task object
         int index1 = -1;              // for checking input
@@ -19,79 +24,78 @@ public class Duke {
         file.closeFile();
 
         while (true) {
-            //getting user input
-            blank();
-            reply = input.nextLine();
-            blank();
+            ui.printBlankLine();
+            input = ui.readCommand();
+            ui.printBlankLine();
 
             // resetting in each loop
             t = null;
             caseX = "";
 
             // checking if user is done
-            if (reply.equals("bye")) {
-                turnOff(file, list);
+            if (input.equals("bye")) {
+                    turnOff(file, list);
             }
 
             // printing list if user inputs "list"
-            else if (reply.equals("list")) {
-                printList(list);
+            else if (input.equals("list")) {
+                ui.printList(list);
             }
 
             else{
-                reply = reply + "          "; // to avoid slicing a string that's to short
+                input = input + "          "; // to avoid slicing a string that's to short
                 try {
-                    if(reply.substring(0, 5).equals("done ")) {
+                    if(input.substring(0, 5).equals("done ")) {
                         caseX = "done ";
                     }
-                    else if(reply.substring(0, 5).equals("todo ")) {
+                    else if(input.substring(0, 5).equals("todo ")) {
                         caseX = "todo ";
                     }
-                    else if(reply.substring(0, 6).equals("event ")){
+                    else if(input.substring(0, 6).equals("event ")){
                         caseX = "event ";
                     }
-                    else if(reply.substring(0, 9).equals("deadline ")){
+                    else if(input.substring(0, 9).equals("deadline ")){
                         caseX = "deadline ";
                     }
-                    else if(reply.substring(0, 7).equals("delete ")){
+                    else if(input.substring(0, 7).equals("delete ")){
                         caseX = "delete ";
                     }
-                    else if(reply.substring(0,5).equals("find ")){
+                    else if(input.substring(0,5).equals("find ")){
                         caseX = "find ";
                     }
                     else{
                         throw new DukeExceptions("Unknown commande");
                     }
-                reply = reply.trim();
+                input = input.trim();
                 }
                 catch(DukeExceptions e){
-                    System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                    ui.errorMessege(" I'm sorry, but I don't know what that means :-(");
                 }
             }
 
             if(caseX.equals("done ")){
                 try {
-                    if (list.get(Integer.parseInt(reply.substring(5)) - 1) == null) {
+                    if (list.get(Integer.parseInt(input.substring(5)) - 1) == null) {
                         throw new DukeExceptions("unvalid done statement");
                     }
                     else {
-                        list.get(Integer.parseInt(reply.substring(5)) - 1).markAsDone();
-                        System.out.println("Nice! I've marked this task as done: \n\t" + list.get(Integer.parseInt(reply.substring(5)) - 1));
+                        list.get(Integer.parseInt(input.substring(5)) - 1).markAsDone();
+                        System.out.println("Nice! I've marked this task as done: \n\t" + list.get(Integer.parseInt(input.substring(5)) - 1));
                     }
                 }
                 catch (Exception e) {
-                    System.out.println("☹ OOPS!!! I'm sorry, but there are no task with that number :-(\");\n");
+                    ui.errorMessege("I'm sorry, but there are no task with that number :-(\");\n");
                 }
             }
 
             else if(caseX.equals("delete ")){
                 try{
-                    System.out.println("Noted. I've removed this task:\n\t" + list.get(Integer.parseInt(reply.substring(7))-1) + "\nNow you have " + list.size() + "tasks in the list" );
-                    list.remove(Integer.parseInt(reply.substring(7)) -1);
+                    ui.messege("Noted. I've removed this task:\n\t" + list.get(Integer.parseInt(input.substring(7))-1) + "\nNow you have " + list.size() + "tasks in the list" );
+                    list.remove(Integer.parseInt(input.substring(7)) -1);
 
                 }
                 catch(Exception e){
-                    System.out.println("☹ OOPS!!! No task with that number");
+                    ui.messege("No task with that number");
                 }
             }
 
@@ -101,125 +105,113 @@ public class Duke {
                 boolean found = false;
                 String str1 = "";
                 try {
-                    if (reply.substring(4).trim().equals("")) {
+                    if (input.substring(4).trim().equals("")) {
                         throw new DukeExceptions("Empty find statement ");
                     }
                 }
                 catch (DukeExceptions e) {
-                    System.out.println("☹ OOPS!!! A find statement cannot be empty");
+                    ui.errorMessege(" A find statement cannot be empty");
                     empty = true;
                 }
                 if (!empty) {
                     for (Task task : list) {
-                        if (task.description.contains(reply.substring(5))) {
+                        if (task.description.contains(input.substring(5))) {
                             str1 =  str1 + "\t\n" + i + ". " + task;
                             i++;
                             found = true;
                         }
                     }
                     if(found){
-                        System.out.println("\tHere are the matching tasks in your list:" + str1 );
+                        ui.messege("\tHere are the matching tasks in your list:" + str1 );
                     }
                     else{
-                        System.out.println("\tNo matching tasks in your list");
+                        ui.messege("\tNo matching tasks in your list");
                     }
                 }
             }
 
             else if(caseX.equals("todo ")) {
                 try {
-                    if (reply.substring(4).replaceAll("\\s+", "").equals("")) {
+                    if (input.substring(4).replaceAll("\\s+", "").equals("")) {
                         throw new DukeExceptions("Unvalid todo statement");
                     }
                     else {
-                        t = new ToDo(reply.substring(5));
+                        t = new ToDo(input.substring(5));
                     }
                 }
                 catch (DukeExceptions e) {
-                    System.out.println("☹ OOPS!!! A todo statement cannot be empty");
+                    ui.errorMessege("A todo statement cannot be empty");
                 }
             }
 
             else if(caseX.equals("deadline ")){
                 try{
-                    index1 = reply.indexOf("/by");
+                    index1 = input.indexOf("/by");
                     if (index1 == -1) {
                         throw new DukeExceptions("Unvalid deadline input");
                     }
                 }
                 catch(Exception e){
-                    System.out.println("☹ OOPS!!! Unvalid deadline input, most contain /by");
+                    ui.errorMessege("Unvalid deadline input, most contain /by");
                 }
 
                 try {
-                    if(!checkDate(reply.substring(index1 + 4, index1 + 14)) || !checkTime(reply.substring(index1 + 15, index1 + 20))) {
+                    if(!checkDate(input.substring(index1 + 4, index1 + 14)) || !checkTime(input.substring(index1 + 15, index1 + 20))) {
                         throw new DukeExceptions("Unvalid deadline input");
                     }
                     else {
-                        String date = convertDate(reply.substring(index1 + 4));
-                        String time1 = convertTime(reply.substring(index1 + 15, index1 + 20));
-                        t = new Deadline(reply.substring(9, index1), date + " " + time1);
+                        String date = convertDate(input.substring(index1 + 4));
+                        String time1 = convertTime(input.substring(index1 + 15, index1 + 20));
+                        t = new Deadline(input.substring(9, index1), date + " " + time1);
                     }
                 }
                 catch(Exception e) {
-                    System.out.println("☹ OOPS!!! Unvalid date/time in the deadline input, most be on format: dd/mm/yyyy hh:mm");
+                    ui.errorMessege("Unvalid date/time in the deadline input, most be on format: dd/mm/yyyy hh:mm");
                 }
             }
 
             else if(caseX.equals("event ")) {
                 try {
-                    index1 = reply.indexOf("/at ");
+                    index1 = input.indexOf("/at ");
                     if (index1 == -1) {
                         throw new DukeExceptions("Unvalid event input");
                     }
                 }
                 catch (DukeExceptions e) {
-                    System.out.println("☹ OOPS!!! Unvalid event input, most contain /at");
+                    ui.errorMessege("Unvalid event input, most contain /at");
                 }
 
                 try {
-                    if (!checkDate(reply.substring(index1 + 4, index1 + 14)) || !checkTime(reply.substring(index1 + 15, index1 + 20)) || !checkTime(reply.substring(index1 + 21, index1 + 26))) {
+                    if (!checkDate(input.substring(index1 + 4, index1 + 14)) || !checkTime(input.substring(index1 + 15, index1 + 20)) || !checkTime(input.substring(index1 + 21, index1 + 26))) {
                         throw new DukeExceptions("Unvalid event input");
                     }
                     else {
-                        String date = convertDate(reply.substring(index1 + 4));
-                        String time1 = convertTime(reply.substring(index1 + 15, index1 + 20));
-                        String time2 = convertTime(reply.substring(index1 + 21, index1 + 26));
-                        t = new Event(reply.substring(6, index1), date + " " + time1 + "-" + time2);
+                        String date = convertDate(input.substring(index1 + 4));
+                        String time1 = convertTime(input.substring(index1 + 15, index1 + 20));
+                        String time2 = convertTime(input.substring(index1 + 21, index1 + 26));
+                        t = new Event(input.substring(6, index1), date + " " + time1 + "-" + time2);
                     }
                 }
                 catch (Exception e) {
-                    System.out.println("☹ OOPS!!! Unvalid date/time in the event input, most be on format: dd/mm/yyyy hh:mm-hh:mm");
+                    ui.errorMessege("Unvalid date/time in the event input, most be on format: dd/mm/yyyy hh:mm-hh:mm");
                 }
             }
 
             if (t != null) {
                 list.add(t);
-                System.out.println("\tGot it. I've added this task:\n\t " + t + "\n\tNow you have " + list.size() + " tasks in the list.");
+                ui.messege("\tGot it. I've added this task:\n\t " + t + "\n\tNow you have " + list.size() + " tasks in the list.");
             }
         }
     }
 
-    public static void turnOff (HandleFile file, ArrayList<Task> list) throws IOException {
-        System.out.println("\tBye. Hope to see you again soon!\n\t");
-        System.out.println("\t" + "_".repeat(50) + "\n");
+    public void turnOff (HandleFile file, ArrayList<Task> list) throws IOException {
+        ui.messege("\tBye. Hope to see you again soon!\n\t");
+        ui.printBlankLine();
         HandleFile.updateFile(list);
         file.closeFile();
         System.exit(0);
     }
 
-    public static void printList (ArrayList<Task> list){
-        int j = 1;
-        System.out.println("Here are the tasks in your list:");
-        for (Task task : list) {
-            if (task != null) {
-                System.out.println(String.valueOf(j) + ".  " + task);
-                j++;
-            } else {
-                break;
-            }
-        }
-    }
 
     public static boolean checkDate (String date){
         return date.matches("^[0,1]?\\d{1}\\/(([0-2]?\\d{1})|([3][0,1]{1}))\\/(([1]{1}[9]{1}[9]{1}\\d{1})|([2-9]{1}\\d{3}))$");
@@ -268,5 +260,9 @@ public class Duke {
 
     public static void blank(){
         System.out.println("\t" + "_".repeat(50) + "\n");
+    }
+
+    public static void main(String[] args) throws IOException {
+        new Duke("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt").run();
     }
 }
