@@ -1,27 +1,25 @@
 import java.io.*;
-import java.util.Scanner; // https://www.programiz.com/java-programming/basic-input-output
 import java.util.*;
 
 public class Duke {
-    private Ui ui;;
+    private Ui ui;
+    private Storage storage;
+    private ArrayList<Task> list;
 
-    public Duke(String filepath) throws IOException {
+    public Duke(String filepath) {
         ui = new Ui();
+        storage = new Storage(filepath);
+        list = storage.readFileAndCreateList();
     }
 
     public void run() throws IOException {
         ui.welcome();
         String input;
-
         Task t;                   // first task object
         int index1 = -1;              // for checking input
         String caseX = "";     // to keep of track of what to doo
 
         // creating the list of tasks from file
-        HandleFile file = new HandleFile();
-        file.openFile();
-        ArrayList<Task> list = file.readFileAndCreateList();
-        file.closeFile();
 
         while (true) {
             ui.printBlankLine();
@@ -34,7 +32,7 @@ public class Duke {
 
             // checking if user is done
             if (input.equals("bye")) {
-                    turnOff(file, list);
+                    turnOff();
             }
 
             // printing list if user inputs "list"
@@ -204,14 +202,13 @@ public class Duke {
         }
     }
 
-    public void turnOff (HandleFile file, ArrayList<Task> list) throws IOException {
+    public void turnOff () {
         ui.messege("\tBye. Hope to see you again soon!\n\t");
         ui.printBlankLine();
-        HandleFile.updateFile(list);
-        file.closeFile();
+        storage.updateFile(list);
+        storage.closeFile();
         System.exit(0);
     }
-
 
     public static boolean checkDate (String date){
         return date.matches("^[0,1]?\\d{1}\\/(([0-2]?\\d{1})|([3][0,1]{1}))\\/(([1]{1}[9]{1}[9]{1}\\d{1})|([2-9]{1}\\d{3}))$");
@@ -258,11 +255,8 @@ public class Duke {
         else{ return hour + ":" + minute + detail;}
     }
 
-    public static void blank(){
-        System.out.println("\t" + "_".repeat(50) + "\n");
-    }
-
     public static void main(String[] args) throws IOException {
         new Duke("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt").run();
     }
 }
+

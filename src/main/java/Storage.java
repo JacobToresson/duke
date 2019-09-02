@@ -2,18 +2,21 @@ import java.io.*; // https://www.youtube.com/watch?v=3RNYUKxAgmw
 import java.util.*;
 import java.lang.*;
 
-public class HandleFile {
+public class Storage {
     private Scanner x;
-    public void openFile(){
-        try{
+    private String filepath;
+
+    public Storage(String filepath) {
+        try {
             x = new Scanner(new File("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt"));
         }
-        catch(Exception e) {
-            System.out.println("Could not find file");
+        catch(Exception e){
+            System.out.println("File not found");
         }
     }
+
     public ArrayList<Task> readFileAndCreateList(){
-        ArrayList<Task> list=new ArrayList<Task>();
+        ArrayList<Task> list = new ArrayList<>();
         String identifier;
         String completed;
         String description;
@@ -75,7 +78,7 @@ public class HandleFile {
         x.close();
     }
 
-    public static void updateFile(ArrayList<Task> list) throws IOException {
+    public void updateFile(ArrayList<Task> list) {
         try {
             FileWriter fw = new FileWriter("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt", false);
             for (Task task : list) {
