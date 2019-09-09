@@ -1,14 +1,29 @@
 import java.io.*; // https://www.youtube.com/watch?v=3RNYUKxAgmw
+import java.nio.file.FileSystemNotFoundException;
 import java.util.*;
 import java.lang.*;
+
+/**
+ *  Deals with loading tasks from the file and saving tasks in the file .
+ *  A Storage object has the following attributes;
+ *  1. x: A scanner that enables ut to take input from the user
+ *  2. filepath: gives the path to the textfile that the tasks are stored in
+ */
 
 public class Storage {
     private Scanner x;
     private String filepath;
 
-    public Storage(String filepath) {
+
+    /**
+     * Constructor of storage creates a file where the tasks will be stored if it does not exist.
+     *
+     * @param filepathh specifies where the textfile with the tasks should be if it exist
+     */
+    public Storage(String filepathh) {
+        filepath = filepathh;
         try {
-            File taskFile = new File("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt");
+            File taskFile = new File(filepath);
             if (!taskFile.exists()) {
                 taskFile.createNewFile();
             }
@@ -19,6 +34,18 @@ public class Storage {
         }
     }
 
+
+    /**
+     *  Creates and returns the list that contains the different tasks based on what is written in the textfile
+     *  identifier: used to identify diffrent types of tasks
+     *  completed: identifies if the task in completed or not
+     *  description: used to store a tasks description
+     *  test: to check if we are at the end of a line or not
+     *  when: used to store a tasks time and data
+     *  task: the actual task that will be added to the list
+     *
+     * @return Arraylist containing the different task objects
+     */
     public ArrayList<Task> readFileAndCreateList(){
         ArrayList<Task> list = new ArrayList<>();
         String identifier;
@@ -78,13 +105,21 @@ public class Storage {
         return list;
     }
 
+    /**
+     * Closes the file so that the result will be saved - runs when exiting duke
+     */
     public void closeFile(){
         x.close();
     }
 
+    /**
+     * Runs when duke is closing and updates the textfile after what have been
+     *
+     * @param list the list of tasks that will be stored in the textfile
+     */
     public void updateFile(ArrayList<Task> list) {
         try {
-            FileWriter fw = new FileWriter("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt", false);
+            FileWriter fw = new FileWriter(filepath, false);
             for (Task task : list) {
                 if (task == null) {
                     break;
