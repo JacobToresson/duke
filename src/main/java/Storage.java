@@ -8,7 +8,11 @@ public class Storage {
 
     public Storage(String filepath) {
         try {
-            x = new Scanner(new File("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt"));
+            File taskFile = new File("/Users/JacobT/Desktop/PLUGG/CS1231/duke/src/main/java/duke.txt");
+            if (!taskFile.exists()) {
+                taskFile.createNewFile();
+            }
+                x = new Scanner(taskFile);
         }
         catch(Exception e){
             System.out.println("File not found");
